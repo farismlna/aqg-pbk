@@ -4,14 +4,13 @@ Setiap perbedaan antara proposal dan purwarupa dicatat di sini,
 supaya tidak disembunyikan. Dokumen ini diperbarui pada setiap
 fase kalau ada keputusan baru.
 
-Sumber kebenaran saat ini adalah repo Faris di GitHub
-(`aqg-pbk`, commit `fb1feb8`, 27 Oktober 2026) yang dibangun
-bersama Claude Web. Salinan di workspace Muse adalah cerminan
-dari repo itu, ditambah README, `app/main.py`, pengujian health,
-katalog miskonsepsi, dan dokumen ini. Jangan membangun dari
-scaffold Fase 1 Muse yang lama, karena scaffold itu memakai
-API config, skema, dan lokasi token yang berbeda dan sudah
-digantikan oleh repo ini.
+Sumber kebenaran saat ini adalah repo agq-pbk di GitHub
+(`aqg-pbk`), yang sudah menyelesaikan Fase 1 sampai Fase 4
+(commit terakhir `5f6404b`, 27 Oktober 2026). Salinan di
+workspace Muse adalah cerminan dari repo itu. Jangan
+membangun dari scaffold Fase 1 Muse yang lama, karena
+scaffold itu memakai API config, skema, dan lokasi token
+yang berbeda dan sudah digantikan oleh repo ini.
 
 ## Sudah diputuskan
 
@@ -130,3 +129,18 @@ digantikan oleh repo ini.
     penanda. Tanpa ini, siswa tidak bisa menjawab benar
     dari daftar pilihan, karena kunci sebelumnya
     disembunyikan seluruhnya.
+
+## Sudah diputuskan (Fase 5)
+
+19. **Verifikasi clean checkout.** Keadaan akhir repo
+    dibuktikan dengan clone segar dari GitHub, venv baru,
+    pemasangan dependensi, dan `pytest` sampai hijau,
+    tanpa memakai berkas lokal dari pengembangan. Hasil
+    verifikasi dicatat di naskah demo, bukan diklaim
+    tanpa bukti.
+20. **Naskah demo memakai mode replay.** Naskah demo
+    (`docs/DEMO_SCRIPT.md`) menyatakan secara eksplisit
+    bahwa kandidat berasal dari adapter replay, bukan
+    dari LLM live, dan memuat kalimat kejujuran tentang
+    sandbox dan modul upload di memori yang wajib
+    diucapkan saat demo.

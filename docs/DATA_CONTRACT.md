@@ -179,3 +179,7 @@ penyorotan sumber di dashboard.
 satu pilihan, diurutkan menurut huruf pilihan, tanpa
 penanda mana yang benar dan tanpa umpan balik. Untuk
 isian rumpang, kunci tidak ditampilkan.
+
+Jumlah pengujian akhir Fase 4: 100, terakhir diukur
+27 Oktober 2026 (95 sebelum Fase 4, ditambah 5 pengujian
+frontend). Naskah demo ada di `docs/DEMO_SCRIPT.md`.
