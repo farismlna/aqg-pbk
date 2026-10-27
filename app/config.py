@@ -25,6 +25,7 @@ TOP_K = 3                     # jumlah potongan yang diambil
 MAX_RETRIEVED_TOKENS = 1200   # 3 potongan x 400 token
 MAX_PROMPT_TOKENS = 600       # instruksi sistem + skema + tugas
 MAX_TOTAL_TOKENS = MAX_RETRIEVED_TOKENS + MAX_PROMPT_TOKENS  # 1800
+TASK_INSTRUCTION_RESERVE = 80  # token yang disisihkan untuk kalimat tugas per panggilan
 
 # --- Batas modul PDF ---
 MAX_PDF_PAGES = 10

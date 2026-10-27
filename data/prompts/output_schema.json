@@ -1,0 +1,241 @@
+{
+  "$defs": {
+    "AnswerKey": {
+      "additionalProperties": false,
+      "description": "Kunci jawaban.",
+      "properties": {
+        "option_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Option Id"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "expected_output": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Output"
+        },
+        "explanation": {
+          "minLength": 1,
+          "title": "Explanation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "text",
+        "explanation"
+      ],
+      "title": "AnswerKey",
+      "type": "object"
+    },
+    "Distractor": {
+      "additionalProperties": false,
+      "description": "Satu jawaban salah (pengecoh).\n\nUntuk pilihan ganda, option_id wajib terisi (misalnya \"B\").\nUntuk isian rumpang, option_id dikosongkan: ini adalah jawaban\nsalah yang diperkirakan akan diketik siswa.",
+      "properties": {
+        "option_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Option Id"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "misconception_type": {
+          "$ref": "#/$defs/MisconceptionType"
+        },
+        "subtype": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Subtype"
+        },
+        "misconception_note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Misconception Note"
+        },
+        "mutated_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mutated Code"
+        },
+        "feedback": {
+          "$ref": "#/$defs/Feedback"
+        }
+      },
+      "required": [
+        "text",
+        "misconception_type",
+        "feedback"
+      ],
+      "title": "Distractor",
+      "type": "object"
+    },
+    "Feedback": {
+      "additionalProperties": false,
+      "description": "Umpan balik tiga bagian untuk satu jawaban.",
+      "properties": {
+        "diagnosis": {
+          "minLength": 1,
+          "title": "Diagnosis",
+          "type": "string"
+        },
+        "explanation": {
+          "minLength": 1,
+          "title": "Explanation",
+          "type": "string"
+        },
+        "next_step": {
+          "minLength": 1,
+          "title": "Next Step",
+          "type": "string"
+        }
+      },
+      "required": [
+        "diagnosis",
+        "explanation",
+        "next_step"
+      ],
+      "title": "Feedback",
+      "type": "object"
+    },
+    "ItemFormat": {
+      "enum": [
+        "mcq",
+        "fill_in_blank"
+      ],
+      "title": "ItemFormat",
+      "type": "string"
+    },
+    "MisconceptionType": {
+      "enum": [
+        "off_by_one",
+        "assignment_error",
+        "logic_error",
+        "syntax_error",
+        "other"
+      ],
+      "title": "MisconceptionType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Satu butir soal (pilihan ganda atau isian rumpang).",
+  "properties": {
+    "item_id": {
+      "minLength": 1,
+      "title": "Item Id",
+      "type": "string"
+    },
+    "item_format": {
+      "$ref": "#/$defs/ItemFormat"
+    },
+    "topic": {
+      "minLength": 1,
+      "title": "Topic",
+      "type": "string"
+    },
+    "stem": {
+      "minLength": 1,
+      "title": "Stem",
+      "type": "string"
+    },
+    "code": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Code"
+    },
+    "answer_key": {
+      "$ref": "#/$defs/AnswerKey"
+    },
+    "distractors": {
+      "items": {
+        "$ref": "#/$defs/Distractor"
+      },
+      "title": "Distractors",
+      "type": "array"
+    },
+    "accepted_answers": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Accepted Answers",
+      "type": "array"
+    },
+    "source_chunk_id": {
+      "minLength": 1,
+      "title": "Source Chunk Id",
+      "type": "string"
+    },
+    "source_page": {
+      "minimum": 1,
+      "title": "Source Page",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "item_id",
+    "item_format",
+    "topic",
+    "stem",
+    "answer_key",
+    "source_chunk_id",
+    "source_page"
+  ],
+  "title": "Item",
+  "type": "object"
+}
