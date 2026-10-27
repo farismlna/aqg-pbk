@@ -122,3 +122,39 @@ Soal isian FIB-01: `nilai = 95`, soal meminta program hanya mencetak "A".
   fill_blank dan berhenti di kegagalan pertama. Gerbang skor orchestrator:
   skor teratas 0 berarti materi tidak cukup, tanpa mencoba kandidat.
   Kandidat replay ada 8 berkas di data/replay (2 bagus, 6 sengaja gagal).
+
+## 10. Penyimpanan dan status kurasi (Fase 3)
+
+Penyimpanan memakai SQLite bawaan Python, berkas
+`data/aqg.db` (diabaikan git). Tabel `items` menyimpan
+butir soal sebagai JSON utuh ditambah kolom status dan
+laporan validator; tabel `attempts` menyimpan jejak
+jawaban: UUID sesi, ID soal, jawaban yang dipilih, benar
+atau salah, dan waktu. Tidak ada nama, NIM, atau data
+pribadi lain.
+
+Status kurasi: `draft`, `approved`, `published`,
+`rejected`. Alurnya draft ke approved ke published;
+rejected bersifat final. Edit menjalankan ulang semua
+validator dan mengembalikan status ke draft. Generate
+ulang tidak menimpa butir yang sudah tersimpan.
+
+Model tambahan Fase 3: `StoredItem` (`item`, `status`,
+`report`), `GenerateRequest` (`topic`, `query`,
+`key_concepts`, `limit`), `RegenerateRequest` (`query`,
+`key_concepts`, `limit`), `QuizItem` dan `QuizDistractor`
+(versi siswa tanpa kunci dan umpan balik), `AnswerRequest`
+(`session_id`, `item_id`, `chosen`), `AnswerResponse`
+(`item_id`, `correct`, `feedback`, `expected_output`).
+
+Endpoint Fase 3: `POST /api/modules` (upload PDF, batas
+sama dengan pembaca PDF), `GET /api/modules`,
+`POST /api/generate`, `GET /api/items`, `GET /api/items/{id}`,
+`PUT /api/items/{id}`, `POST /api/items/{id}/approve`,
+`/reject`, `/publish`, `/regenerate`,
+`POST /api/quiz/session`, `GET /api/quiz`,
+`POST /api/quiz/answer`, `GET /api/quiz/summary`.
+Galat dijawab tanpa traceback mentah: 404 bila tidak
+ditemukan, 409 bila transisi status tidak sah, 422 bila
+validator atau UUID sesi tidak sah, 500 dengan pesan
+umum bila galat tak terduga.

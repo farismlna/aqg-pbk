@@ -154,7 +154,7 @@ http://127.0.0.1:8000/api/health
 Respons yang diharapkan:
 
 ```json
-{"status": "ok", "version": "0.2.0-phase2a", "language": "Python 3.10+", "python_target": "3.13", "tokenizer": "cl100k_base", "mode": "replay"}
+{"status": "ok", "version": "0.3.0-phase3", "language": "Python 3.10+", "python_target": "3.13", "tokenizer": "cl100k_base", "mode": "replay"}
 ```
 
 ## 📁 Struktur Proyek
@@ -193,6 +193,25 @@ aqg-pbk/
 └── pytest.ini                   # Konfigurasi pytest
 ```
 
+## API (Fase 3)
+
+Penyimpanan memakai SQLite lokal (`data/aqg.db`, diabaikan git). Modul hasil upload hanya hidup selama server berjalan; restart kembali ke modul demo.
+
+| Route | Kegunaan |
+|---|---|
+| `POST /api/modules` | Upload modul PDF (maks 10 halaman, 5 MB) |
+| `GET /api/modules` | Keterangan modul aktif |
+| `POST /api/generate` | Generate kandidat, simpan sebagai draft |
+| `GET /api/items`, `GET /api/items/{id}` | Lihat butir tersimpan |
+| `PUT /api/items/{id}` | Edit (divalidasi ulang, kembali ke draft) |
+| `POST /api/items/{id}/approve`, `/reject`, `/publish`, `/regenerate` | Kurasi |
+| `POST /api/quiz/session` | Terbitkan UUID sesi anonim |
+| `GET /api/quiz` | Soal terbit tanpa kunci dan umpan balik |
+| `POST /api/quiz/answer` | Jawab dan terima umpan balik tiga bagian |
+| `GET /api/quiz/summary` | Rekap sesi |
+
+Jalankan server dengan `uvicorn app.main:app --reload`, lalu coba `GET /api/health` dan `GET /api/quiz` di browser.
+
 ## 🧪 Pengujian
 
 84 pengujian, terakhir diukur 27 Oktober 2026 (83 tanpa berkas health check, 84 dengan berkas tersebut).
@@ -227,7 +246,7 @@ Hasil yang diharapkan dari `pytest` adalah `84 passed`. Pengujian orchestrator m
 - [x] **Fase 1**: Kerangka dan kontrak data.
 - [x] **Fase 2A**: Ingest, chunking, retriever, dan coverage.
 - [x] **Fase 2B**: Validator, adapter replay, dan orchestrator.
-- [ ] **Fase 3**: API dan penyimpanan (Teacher Dashboard API, kurasi, dan publish).
+- [x] **Fase 3**: API dan penyimpanan (Teacher Dashboard API, kurasi, dan publish).
 - [ ] **Fase 4**: Frontend Teacher Dashboard dan Student View.
 - [ ] **Fase 5**: Integrasi dan penguatan demo.
 

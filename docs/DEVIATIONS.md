@@ -71,9 +71,6 @@ digantikan oleh repo ini.
 8. **Penyorotan sumber tingkat chunk.** Penyorotan di Teacher
    Dashboard direncanakan pada tingkat teks chunk, bukan
    penyorotan di dalam file PDF. Belum diimplementasikan.
-
-## Belum diputuskan atau masih terbuka
-
 9. **Validator berurutan dengan short-circuit.** Validator
    dijalankan berurutan schema, ast, lint, sandbox, lalu
    fill_blank, dan berhenti di kegagalan pertama, supaya
@@ -89,3 +86,27 @@ digantikan oleh repo ini.
     subprocess dengan batas waktu 2 detik dan keluaran
     yang dibatasi, dan tetap bukan batas keamanan yang
     sesungguhnya tanpa Docker di Windows.
+
+## Sudah diputuskan (Fase 3)
+
+12. **Penyimpanan SQLite lokal.** Penyimpanan v1 memakai
+    `sqlite3` bawaan Python dengan berkas `data/aqg.db`
+    (diabaikan git), bukan database relasional kampus.
+    Butir soal disimpan sebagai JSON utuh ditambah status
+    kurasi, supaya skema `Item` tidak berubah.
+13. **Modul hasil upload hanya di memori.** Upload
+    mengganti potongan aktif selama server berjalan dan
+    berkasnya tidak ditulis permanen. Restart server
+    kembali ke modul demo. Keterbatasan ini disengaja
+    untuk v1 dan harus dihapus bila penyimpanan modul
+    permanen ditambahkan.
+14. **Umpan balik jawaban benar dan jawaban tak dikenal.**
+    Jawaban benar mendapat umpan balik yang dibangun dari
+    `explanation` pada kunci. Jawaban salah yang tidak
+    cocok dengan distraktor mana pun mendapat umpan balik
+    umum yang juga memakai `explanation` kunci, bukan
+    umpan balik distraktor yang salah.
+15. **Generate tidak menimpa.** Generate atau regenerate
+    yang menemukan `item_id` yang sudah tersimpan
+    mengembalikan butir lama apa adanya, supaya kurasi
+    dosen tidak hilang.

@@ -5,6 +5,7 @@ supaya tidak tersebar di banyak berkas. Mengubah angka di sini
 berarti mengubah kontrak.
 """
 
+import os
 from pathlib import Path
 
 # --- Lokasi folder ---
@@ -13,6 +14,16 @@ DATA_DIR = BASE_DIR / "data"
 PROMPT_DIR = DATA_DIR / "prompts"
 MODULE_DIR = DATA_DIR / "modules"
 REPLAY_DIR = DATA_DIR / "replay"
+
+# --- Penyimpanan (Fase 3) ---
+# SQLite bawaan Python, tanpa dependensi baru. Berkasnya
+# diabaikan git (pola *.db di .gitignore). Pengujian
+# mengganti nilai ini dengan berkas sementara lewat
+# monkeypatch atas config.DATABASE_PATH, jadi fungsi
+# penyimpanan harus membaca nilai ini setiap dipanggil,
+# bukan mengikatnya sebagai nilai default di definisi.
+_env_db = os.environ.get("AQG_DB_PATH")
+DATABASE_PATH = Path(_env_db) if _env_db else DATA_DIR / "aqg.db"
 
 # --- Anggaran token ---
 # Token = potongan kecil teks yang dihitung oleh model bahasa.

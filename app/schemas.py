@@ -212,3 +212,79 @@ class ValidationReport(StrictModel):
 
     def failed_names(self) -> list[str]:
         return [r.name for r in self.results if not r.passed]
+    
+# --- Penyimpanan dan API (Fase 3) ------------------------------------------
+
+class ItemStatus(StrEnum):
+    """Status kurasi satu butir soal yang tersimpan."""
+
+    DRAFT = "draft"            # baru dibuat, belum dikurasi
+    APPROVED = "approved"      # disetujui dosen, belum terbit
+    PUBLISHED = "published"    # terbit, bisa dikerjakan siswa
+    REJECTED = "rejected"      # ditolak, tidak bisa terbit
+
+
+class StoredItem(StrictModel):
+    """Butir soal yang tersimpan beserta status kurasi dan laporan validator."""
+
+    item: Item
+    status: ItemStatus = ItemStatus.DRAFT
+    report: ValidationReport | None = None
+
+
+class GenerateRequest(StrictModel):
+    """Permintaan generate: topik, pertanyaan, konsep kunci, batas jumlah."""
+
+    topic: str = Field(min_length=1)
+    query: str = Field(min_length=1)
+    key_concepts: list[str] = Field(min_length=1)
+    limit: int = Field(default=10, ge=1, le=10)
+
+
+class RegenerateRequest(StrictModel):
+    """Permintaan regenerate untuk satu butir soal yang sudah ada."""
+
+    query: str = ""
+    key_concepts: list[str] = Field(default_factory=list)
+    limit: int = Field(default=1, ge=1, le=10)
+
+
+class QuizDistractor(StrictModel):
+    """Pengecoh versi siswa: hanya huruf pilihan dan teksnya.
+
+    Jenis miskonsepsi dan umpan balik disembunyikan sampai
+    siswa menjawab, supaya tidak membocorkan jawaban.
+    """
+
+    option_id: str | None = None
+    text: str = Field(min_length=1)
+
+
+class QuizItem(StrictModel):
+    """Butir soal versi siswa: tanpa kunci jawaban dan tanpa umpan balik."""
+
+    item_id: str = Field(min_length=1)
+    item_format: ItemFormat
+    topic: str = Field(min_length=1)
+    stem: str = Field(min_length=1)
+    code: str | None = None
+    distractors: list[QuizDistractor] = Field(default_factory=list)
+    source_chunk_id: str = Field(min_length=1)
+    source_page: int = Field(ge=1)
+
+
+class AnswerRequest(StrictModel):
+    """Jawaban siswa: UUID sesi, ID soal, dan jawaban yang dipilih/diketik."""
+
+    session_id: str = Field(min_length=1)
+    item_id: str = Field(min_length=1)
+    chosen: str = Field(min_length=1)
+
+
+class AnswerResponse(StrictModel):
+    """Hasil penilaian: benar atau salah, umpan balik, dan keluaran yang benar."""
+
+    item_id: str = Field(min_length=1)
+    correct: bool
+    feedback: Feedback
+    expected_output: str | None = None
