@@ -13,6 +13,7 @@ dari dokumen ini, perbarui dokumen ini dan kodenya bersama-sama.
 | Penghitung token | cl100k_base | Perkiraan untuk model non-OpenAI |
 | Ukuran potongan teks | 400 token | |
 | Tumpang tindih potongan | 0 token | Keputusan sementara |
+| Bagian materi minimum | 60 token | Bagian lebih pendek digabung ke bagian berikutnya |
 | Jumlah potongan diambil (top-k) | 3 | |
 | Maksimum potongan teks diambil | 1200 token | 3 potongan x 400 |
 | Maksimum prompt | 600 token | Prompt sistem paling banyak 520 + cadangan kalimat tugas 80 |
@@ -115,3 +116,5 @@ Soal isian FIB-01: `nilai = 95`, soal meminta program hanya mencetak "A".
   berjalan. Pertimbangkan nama jenis yang lebih tepat di fase berikutnya.
 - Tumpang tindih potongan 0 token adalah keputusan sementara.
 - Cara pengambilan potongan (TF-IDF) diputuskan di Fase 2.
+- Teks sebelum judul pertama (halaman judul dokumen) dibuang dari potongan
+  bila modul punya judul. Baris judul topik ikut ke bagian bernomor berikutnya.
