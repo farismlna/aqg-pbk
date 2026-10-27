@@ -158,3 +158,24 @@ Galat dijawab tanpa traceback mentah: 404 bila tidak
 ditemukan, 409 bila transisi status tidak sah, 422 bila
 validator atau UUID sesi tidak sah, 500 dengan pesan
 umum bila galat tak terduga.
+
+## 11. Frontend (Fase 4)
+
+Frontend memakai HTML, CSS, dan JavaScript vanila dari
+`app/static/`, tanpa build dan tanpa aset luar. Route `/`
+mengembalikan `index.html`; routing memakai hash:
+`#/dosen` untuk Teacher Dashboard dan `#/siswa` untuk
+Student View. Berkas statis dilayani di `/static/`.
+
+Route `GET /api/modules/file` mengembalikan isi PDF modul
+aktif untuk panel PDF: modul demo dibaca dari disk, modul
+hasil upload dikembalikan dari isi PDF yang disimpan di
+memori. Respons `GET /api/modules` juga memuat daftar
+`potongan` berisi `chunk_id`, `heading`, `page`, dan
+`text` tiap potongan, untuk daftar potongan dan
+penyorotan sumber di dashboard.
+
+`QuizItem` untuk pilihan ganda memuat kunci sebagai salah
+satu pilihan, diurutkan menurut huruf pilihan, tanpa
+penanda mana yang benar dan tanpa umpan balik. Untuk
+isian rumpang, kunci tidak ditampilkan.

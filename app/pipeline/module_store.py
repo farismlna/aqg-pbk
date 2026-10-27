@@ -4,9 +4,11 @@ Saat server mulai, modul aktif adalah modul demo. Upload
 modul baru mengganti potongan aktif selama server berjalan.
 Modul hasil upload hanya disimpan di memori: berkasnya
 tidak ditulis permanen, sehingga restart server kembali
-ke modul demo. Keterbatasan ini dicatat di DEVIATIONS.md
-dan disengaja untuk v1, supaya pengujian tidak menulis
-berkas ke folder data dan perilaku server mudah diulang.
+ke modul demo. Isi PDF hasil upload disimpan di memori
+supaya bisa ditampilkan di panel PDF Teacher Dashboard.
+Keterbatasan ini dicatat di DEVIATIONS.md dan disengaja 
+untuk v1, supaya pengujian tidak menulis berkas ke folder 
+data dan perilaku server mudah diulang.
 """
 
 import tempfile
@@ -24,12 +26,19 @@ UPLOADED_MODULE_ID = "UPLOADED"
 
 @dataclass(frozen=True)
 class ActiveModule:
-    """Keadaan modul aktif: id, nama berkas, potongan, jumlah halaman."""
+    """Keadaan modul aktif: id, nama berkas, potongan, jumlah halaman.
+
+    pdf_bytes hanya terisi untuk modul hasil upload (isi PDF
+    untuk panel PDF); modul demo dibaca dari disk oleh
+    endpoint berkas modul, jadi nilainya None.
+    """
 
     module_id: str
     filename: str | None
     chunks: list[Chunk]
     pages: int
+    pdf_bytes: bytes | None = None
+
 
 
 class ModuleStore:
@@ -85,6 +94,7 @@ class ModuleStore:
             filename=filename,
             chunks=potongan,
             pages=len(halaman),
+            pdf_bytes=data,
         )
         return self._active
 

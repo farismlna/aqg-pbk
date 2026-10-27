@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AQG-DDP — Pembangkit Soal Python untuk DDP</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="bar-atas">
+  <div class="judul">AQG-DDP <span class="subjudul">Purwarupa pembangkit soal Python untuk DDP</span></div>
+  <nav aria-label="Tampilan utama">
+    <a href="#/dosen" id="tautan-dosen">Dosen</a>
+    <a href="#/siswa" id="tautan-siswa">Siswa</a>
+  </nav>
+</header>
+
+<main>
+  <p id="pesan" class="pesan" role="status" aria-live="polite"></p>
+
+  <section id="tampilan-dosen" aria-label="Teacher Dashboard">
+    <h1>Teacher Dashboard</h1>
+
+    <div class="panel-form">
+      <form id="form-upload">
+        <h2>Upload modul</h2>
+        <label for="input-berkas">Berkas PDF (maks 10 halaman, 5 MB, teks saja)</label>
+        <input id="input-berkas" name="file" type="file" accept="application/pdf,.pdf" required>
+        <button type="submit">Upload modul</button>
+      </form>
+      <p id="info-modul">Memuat keterangan modul...</p>
+      <form id="form-generate">
+        <h2>Generate soal</h2>
+        <label for="input-topik">Topik</label>
+        <input id="input-topik" type="text" required value="Percabangan">
+        <label for="input-query">Pertanyaan (untuk mengambil potongan materi)</label>
+        <input id="input-query" type="text" required value="percabangan if elif">
+        <label for="input-konsep">Konsep kunci (pisahkan dengan koma)</label>
+        <input id="input-konsep" type="text" required value="if, elif, else">
+        <label for="input-batas">Batas jumlah soal</label>
+        <input id="input-batas" type="number" min="1" max="10" value="2">
+        <button type="submit">Generate</button>
+      </form>
+      <label class="saring">Tampilkan status
+        <select id="saring-status">
+          <option value="">Semua</option>
+          <option value="draft">Draft</option>
+          <option value="approved">Disetujui</option>
+          <option value="published">Terbit</option>
+          <option value="rejected">Ditolak</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="split">
+      <div class="panel-kiri">
+        <h2>Modul</h2>
+        <iframe id="pdf-modul" title="PDF modul aktif" src="/api/modules/file"></iframe>
+        <h3>Potongan teks</h3>
+        <p class="keterangan">Klik pil sumber pada kartu soal untuk menyorot potongan sumbernya di sini.</p>
+        <div id="daftar-potongan"></div>
+      </div>
+      <div class="panel-kanan">
+        <h2>Butir soal</h2>
+        <div id="daftar-item"></div>
+      </div>
+    </div>
+
+    <section id="form-edit" class="panel-edit" hidden aria-label="Edit butir soal">
+      <h2 id="edit-judul">Edit butir soal</h2>
+      <form id="form-edit-isi">
+        <label for="edit-stem">Pertanyaan (stem)</label>
+        <textarea id="edit-stem" rows="3" required></textarea>
+        <label for="edit-kode">Kode</label>
+        <textarea id="edit-kode" rows="6" spellcheck="false"></textarea>
+        <label for="edit-kunci">Teks kunci jawaban</label>
+        <input id="edit-kunci" type="text" required>
+        <label for="edit-penjelasan-kunci">Penjelasan kunci jawaban</label>
+        <textarea id="edit-penjelasan-kunci" rows="3" required></textarea>
+        <label for="edit-diterima">Jawaban yang diterima (isian rumpang, pisahkan dengan koma)</label>
+        <input id="edit-diterima" type="text">
+        <div id="edit-pengecoh"></div>
+        <div class="aksi-form">
+          <button type="submit">Simpan (divalidasi ulang)</button>
+          <button type="button" id="tombol-batal-edit">Batal</button>
+        </div>
+      </form>
+    </section>
+  </section>
+
+  <section id="tampilan-siswa" aria-label="Student View" hidden>
+    <h1>Student View</h1>
+    <p id="kuis-kosong" class="keterangan">Belum ada soal yang terbit. Minta dosen menerbitkan soal dari Teacher Dashboard, lalu muat ulang halaman ini.</p>
+
+    <article id="kartu-soal" hidden>
+      <p id="soal-nomor" class="nomor-soal"></p>
+      <h2 id="soal-stem"></h2>
+      <div id="soal-kode" class="kode" aria-label="Kode soal"></div>
+      <div id="soal-pilihan" class="pilihan"></div>
+      <div id="soal-isian" hidden>
+        <label for="jawaban-isian">Jawabanmu</label>
+        <input id="jawaban-isian" type="text" autocomplete="off" spellcheck="false">
+        <button type="button" id="tombol-jawab-isian">Jawab</button>
+      </div>
+      <div id="umpan-balik" class="umpan-balik" hidden aria-live="polite">
+        <p id="umpan-status" class="umpan-status"></p>
+        <p><strong>Dugaan pemikiranmu:</strong> <span id="umpan-diagnosis"></span></p>
+        <p><strong>Penjelasan:</strong> <span id="umpan-penjelasan"></span></p>
+        <p><strong>Langkah berikutnya:</strong> <span id="umpan-langkah"></span></p>
+        <p id="umpan-keluaran"></p>
+      </div>
+      <div class="aksi-soal">
+        <button type="button" id="tombol-coba-lagi" hidden>Coba lagi</button>
+        <button type="button" id="tombol-berikutnya" hidden>Soal berikutnya</button>
+      </div>
+    </article>
+
+    <div id="rekap" hidden>
+      <h2>Rekap sesi</h2>
+      <p id="rekap-teks"></p>
+      <ul id="rekap-daftar"></ul>
+      <button type="button" id="tombol-ulangi">Mulai sesi baru</button>
+    </div>
+  </section>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

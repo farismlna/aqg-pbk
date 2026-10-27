@@ -11,11 +11,17 @@ salah, dan waktu.
 import uuid
 
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
+from fastapi.responses import FileResponse, Response
+
 
 from app import config, storage
 from app.errors import ChunkError, IngestError, TokenBudgetError
 from app.llm.replay import ReplayAdapter
-from app.pipeline.module_store import ModuleStore, get_module_store
+from app.pipeline.module_store import (
+    DEMO_MODULE_ID,
+    ModuleStore,
+    get_module_store,
+)
 from app.pipeline.orchestrator import Orchestrator
 from app.pipeline.validators.validate_item import validate_item
 from app.quiz import grade, strip_item
@@ -60,7 +66,44 @@ def _info_modul(store: ModuleStore) -> dict:
         "pages": aktif.pages,
         "chunks": len(aktif.chunks),
         "chunk_ids": [potongan.chunk_id for potongan in aktif.chunks],
+        "potongan": [
+            {
+                "chunk_id": potongan.chunk_id,
+                "heading": potongan.heading,
+                "page": potongan.page,
+                "text": potongan.text,
+            }
+            for potongan in aktif.chunks
+        ],
     }
+    
+    
+@router.get("/modules/file")
+def berkas_modul(store: ModuleStore = Depends(get_store)):
+    """Isi PDF modul aktif, untuk panel PDF Teacher Dashboard.
+
+    Modul demo dibaca dari disk; modul hasil upload
+    dikembalikan dari isi PDF yang disimpan di memori.
+    """
+    aktif = store.active
+    if aktif.module_id == DEMO_MODULE_ID:
+        jalur = config.MODULE_DIR / "modul_demo.pdf"
+        return FileResponse(
+            jalur, media_type="application/pdf", filename="modul_demo.pdf"
+        )
+    if aktif.pdf_bytes is None:
+        raise HTTPException(
+            status_code=404, detail="Berkas PDF modul tidak tersedia."
+        )
+    return Response(
+        content=aktif.pdf_bytes,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": (
+                f'inline; filename="{aktif.filename or "modul.pdf"}"'
+            )
+        },
+    )
 
 
 def _jalankan_orchestrator(

@@ -110,3 +110,23 @@ digantikan oleh repo ini.
     yang menemukan `item_id` yang sudah tersimpan
     mengembalikan butir lama apa adanya, supaya kurasi
     dosen tidak hilang.
+
+## Sudah diputuskan (Fase 4)
+
+16. **Frontend vanila tanpa build.** Frontend memakai
+    HTML, CSS, dan JavaScript vanila dari `app/static/`,
+    disajikan FastAPI, tanpa Node dan tanpa aset luar.
+    Routing memakai hash (`#/dosen`, `#/siswa`).
+17. **Panel PDF lewat iframe.** Teacher Dashboard
+    menampilkan PDF modul aktif di iframe lewat
+    `GET /api/modules/file`, dengan daftar teks potongan
+    di bawahnya. Penyorotan sumber bekerja pada teks
+    potongan, bukan di dalam PDF (butir 8). Isi PDF hasil
+    upload disimpan di memori di `ModuleStore` hanya
+    untuk keperluan tampilan ini.
+18. **Kunci ikut menjadi pilihan.** Daftar soal siswa
+    untuk pilihan ganda memuat kunci sebagai salah satu
+    pilihan, diurutkan menurut huruf pilihan, tanpa
+    penanda. Tanpa ini, siswa tidak bisa menjawab benar
+    dari daftar pilihan, karena kunci sebelumnya
+    disembunyikan seluruhnya.

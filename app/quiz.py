@@ -1,14 +1,17 @@
 """Logika Student View: menyembunyikan kunci dan menilai jawaban.
 
-Daftar soal untuk siswa tidak memuat kunci jawaban, jenis
-miskonsepsi, maupun umpan balik, supaya jawaban tidak
-bocor sebelum siswa menjawab. Umpan balik baru diberikan
-setelah jawaban dinilai: jawaban benar mendapat penjelasan
-dari kunci, jawaban salah mendapat umpan balik distraktor
-yang cocok, dan jawaban salah yang tidak cocok dengan
-distraktor mana pun mendapat umpan balik umum dari
-penjelasan kunci.
+Daftar soal untuk siswa tidak menandai jawaban mana yang
+benar dan tidak memuat umpan balik, supaya jawaban tidak
+bocor sebelum siswa menjawab. Untuk pilihan ganda, kunci
+ikut ditampilkan sebagai salah satu pilihan, diurutkan
+menurut huruf pilihan, tanpa penanda mana yang benar.
+Umpan balik baru diberikan setelah jawaban dinilai:
+jawaban benar mendapat penjelasan dari kunci, jawaban
+salah mendapat umpan balik distraktor yang cocok, dan
+jawaban salah yang tidak cocok dengan distraktor mana pun
+mendapat umpan balik umum dari penjelasan kunci.
 """
+
 
 from app.schemas import Feedback, Item, QuizDistractor, QuizItem
 
@@ -19,17 +22,36 @@ def _norm(teks: str) -> str:
 
 
 def strip_item(item: Item) -> QuizItem:
-    """Versi siswa dari satu butir soal, tanpa kunci dan umpan balik."""
+    """Versi siswa dari satu butir soal, tanpa penanda kunci dan umpan balik.
+
+    Pilihan ganda: kunci ikut menjadi salah satu pilihan,
+    diurutkan menurut huruf pilihan. Isian rumpang: kunci
+    tidak ditampilkan; siswa mengetik jawabannya.
+    """
+    if item.item_format.value == "mcq":
+        pilihan = [
+            QuizDistractor(option_id=d.option_id, text=d.text)
+            for d in item.distractors
+        ]
+        pilihan.append(
+            QuizDistractor(
+                option_id=item.answer_key.option_id,
+                text=item.answer_key.text,
+            )
+        )
+        pilihan.sort(key=lambda p: p.option_id or "")
+    else:
+        pilihan = [
+            QuizDistractor(option_id=d.option_id, text=d.text)
+            for d in item.distractors
+        ]
     return QuizItem(
         item_id=item.item_id,
         item_format=item.item_format,
         topic=item.topic,
         stem=item.stem,
         code=item.code,
-        distractors=[
-            QuizDistractor(option_id=d.option_id, text=d.text)
-            for d in item.distractors
-        ],
+        distractors=pilihan,
         source_chunk_id=item.source_chunk_id,
         source_page=item.source_page,
     )
