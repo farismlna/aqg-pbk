@@ -15,3 +15,7 @@ class IngestError(AqgError):
 
 class ChunkError(AqgError):
     """Dilempar ketika teks tidak bisa dipotong sesuai aturan."""
+
+
+class RetrievalError(AqgError):
+    """Dilempar ketika potongan materi tidak bisa diambil."""

@@ -1,0 +1,44 @@
+{
+    "misconceptions": [
+        {
+            "description": "Mengira batas stop pada range(start, stop) ikut diproses, atau mengira pengindeksan list dimulai dari 1.",
+            "examples": [
+                "range(1, 4) dianggap memproses 4",
+                "data[len(data)] dianggap valid"
+            ],
+            "type": "off_by_one"
+        },
+        {
+            "description": "Mengira = dan == sama, atau mengira baris perbandingan mengubah nilai variabel.",
+            "examples": [
+                "skor == skor + 5 dianggap mengubah skor",
+                "if x = 5 dianggap valid"
+            ],
+            "type": "assignment_error"
+        },
+        {
+            "description": "Salah menafsirkan kondisi gabungan, negasi, atau alur percabangan, misalnya mengira blok if tidak berjalan padahal kondisinya True.",
+            "examples": [
+                "not (a and b) dihitung sebagai (not a) and (not b)",
+                "blok if dilewatkan padahal kondisi True"
+            ],
+            "type": "logic_error"
+        },
+        {
+            "description": "Jawaban salah yang memakai sintaks Python yang tidak valid, misalnya else if sebagai dua kata. Lihat catatan terbuka di docs/DATA_CONTRACT.md bagian 9: subtipe independent-if untuk if terpisah masih diragukan penandaannya, karena programnya berjalan.",
+            "examples": [
+                "else if sebagai dua kata",
+                "if terpisah yang memutus rantai elif (subtipe independent-if, penandaan masih terbuka)"
+            ],
+            "type": "syntax_error"
+        },
+        {
+            "description": "Penalaran yang menggabungkan lebih dari satu kesalahan atau tidak cocok dengan empat tipe lain. Wajib disertai misconception_note yang spesifik.",
+            "examples": [
+                "partial_branch_update pada soal skor/pengali (distraktor 30)"
+            ],
+            "note_required": true,
+            "type": "other"
+        }
+    ]
+}

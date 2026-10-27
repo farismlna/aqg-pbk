@@ -1,0 +1,39 @@
+{
+  "item_id": "FIB-01",
+  "item_format": "fill_in_blank",
+  "topic": "Percabangan",
+  "stem": "Lengkapi bagian kosong agar program hanya mencetak \"A\".",
+  "code": "nilai = 95\nif nilai >= 90:\n    print(\"A\")\n____ nilai >= 75:\n    print(\"B\")\nelse:\n    print(\"C\")",
+  "answer_key": {
+    "text": "elif",
+    "expected_output": "A",
+    "explanation": "elif hanya diperiksa jika kondisi sebelumnya salah."
+  },
+  "accepted_answers": [
+    "elif"
+  ],
+  "distractors": [
+    {
+      "text": "if",
+      "misconception_type": "syntax_error",
+      "subtype": "independent-if",
+      "feedback": {
+        "diagnosis": "Anda mungkin mengira ...",
+        "explanation": "Yang sebenarnya terjadi adalah ...",
+        "next_step": "Coba telusuri nilai variabel baris demi baris."
+      }
+    },
+    {
+      "text": "else if",
+      "misconception_type": "syntax_error",
+      "subtype": "else-if-separate",
+      "feedback": {
+        "diagnosis": "Anda mungkin mengira ...",
+        "explanation": "Yang sebenarnya terjadi adalah ...",
+        "next_step": "Coba telusuri nilai variabel baris demi baris."
+      }
+    }
+  ],
+  "source_chunk_id": "DEMO-P01-C03",
+  "source_page": 1
+}

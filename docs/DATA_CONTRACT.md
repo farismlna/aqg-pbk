@@ -115,6 +115,10 @@ Soal isian FIB-01: `nilai = 95`, soal meminta program hanya mencetak "A".
 - Subtipe `independent-if` bertipe `syntax_error`, padahal programnya
   berjalan. Pertimbangkan nama jenis yang lebih tepat di fase berikutnya.
 - Tumpang tindih potongan 0 token adalah keputusan sementara.
-- Cara pengambilan potongan (TF-IDF) diputuskan di Fase 2.
+- Cara pengambilan potongan diputuskan di Fase 2A: TF-IDF + cosine (scikit-learn).
 - Teks sebelum judul pertama (halaman judul dokumen) dibuang dari potongan
   bila modul punya judul. Baris judul topik ikut ke bagian bernomor berikutnya.
+- Fase 2B: validator dijalankan berurutan schema, ast, lint, sandbox,
+  fill_blank dan berhenti di kegagalan pertama. Gerbang skor orchestrator:
+  skor teratas 0 berarti materi tidak cukup, tanpa mencoba kandidat.
+  Kandidat replay ada 8 berkas di data/replay (2 bagus, 6 sengaja gagal).

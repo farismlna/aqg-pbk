@@ -1,0 +1,47 @@
+{
+  "item_id": "BAD-SCHEMA-01",
+  "item_format": "mcq",
+  "topic": "Percabangan",
+  "code": "skor = 10\npengali = 2\nif skor > 5:\n    pengali = pengali * 2\n    skor == skor + 5\nprint(skor * pengali)",
+  "answer_key": {
+    "option_id": "A",
+    "text": "40",
+    "expected_output": "40",
+    "explanation": "== hanya membandingkan, skor tetap 10."
+  },
+  "distractors": [
+    {
+      "option_id": "B",
+      "text": "60",
+      "misconception_type": "assignment_error",
+      "feedback": {
+        "diagnosis": "Anda mungkin mengira ...",
+        "explanation": "Yang sebenarnya terjadi adalah ...",
+        "next_step": "Coba telusuri nilai variabel baris demi baris."
+      }
+    },
+    {
+      "option_id": "C",
+      "text": "20",
+      "misconception_type": "logic_error",
+      "feedback": {
+        "diagnosis": "Anda mungkin mengira ...",
+        "explanation": "Yang sebenarnya terjadi adalah ...",
+        "next_step": "Coba telusuri nilai variabel baris demi baris."
+      }
+    },
+    {
+      "option_id": "D",
+      "text": "30",
+      "misconception_type": "other",
+      "misconception_note": "partial_branch_update: skor dihitung berubah, pengali = pengali * 2 di dalam blok if dilewati.",
+      "feedback": {
+        "diagnosis": "Anda mungkin mengira ...",
+        "explanation": "Yang sebenarnya terjadi adalah ...",
+        "next_step": "Coba telusuri nilai variabel baris demi baris."
+      }
+    }
+  ],
+  "source_chunk_id": "DEMO-P02-C01",
+  "source_page": 2
+}
